@@ -1,4 +1,7 @@
+// This is copied from @bbachain/wallet-standard-chains
+
 import type { IdentifierString } from '@wallet-standard/base';
+import type { Transaction, VersionedTransaction } from '@bbachain/web3.js';
 
 /** BBAChain Mainnet cluster, e.g. https://api-mainnet.bbachain.com */
 export const BBACHAIN_MAINNET_CHAIN = 'bbachain:mainnet';
@@ -20,4 +23,10 @@ export type BBAChain = (typeof BBACHAIN_CHAINS)[number];
  */
 export function isBBAChain(chain: IdentifierString): chain is BBAChain {
     return BBACHAIN_CHAINS.includes(chain as BBAChain);
+}
+
+export function isVersionedTransaction(
+    transaction: Transaction | VersionedTransaction
+): transaction is VersionedTransaction {
+    return 'version' in transaction;
 }

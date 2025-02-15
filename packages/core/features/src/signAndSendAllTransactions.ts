@@ -1,48 +1,48 @@
-import type { SolanaTransactionVersion } from './signTransaction.js';
+import type { BBAChainTransactionVersion } from './signTransaction.js';
 import type {
-    SolanaSignAndSendTransactionInput,
-    SolanaSignAndSendTransactionOutput,
+    BBAChainSignAndSendTransactionInput,
+    BBAChainSignAndSendTransactionOutput,
 } from './signAndSendTransaction.js';
 
 /** Name of the feature */
-export const SignAndSendAllTransactions = 'solana:signAndSendAllTransactions';
+export const SignAndSendAllTransactions = 'bbachain:signAndSendAllTransactions';
 
 /** TODO: docs */
-export type SolanaSignAndSendAllTransactionsFeature = {
+export type BBAChainSignAndSendAllTransactionsFeature = {
     /** Name of the feature. */
     readonly [SignAndSendAllTransactions]: {
         /** Version of the feature API. */
-        readonly version: SolanaSignAndSendAllTransactionsVersion;
+        readonly version: BBAChainSignAndSendAllTransactionsVersion;
 
         /** TODO: docs */
-        readonly supportedTransactionVersions: readonly SolanaTransactionVersion[];
+        readonly supportedTransactionVersions: readonly BBAChainTransactionVersion[];
 
         /**
          * Sign transactions using the account's secret key and send them to the chain.
          *
-         * @param inputs {SolanaSignAndSendTransactionInput[]} Inputs for signing and sending multiple transactions.
-         * @param options {SolanaSignAndSendAllTransactionsOptions} Options for signing and sending transactions.
+         * @param inputs {BBAChainSignAndSendTransactionInput[]} Inputs for signing and sending multiple transactions.
+         * @param options {BBAChainSignAndSendAllTransactionsOptions} Options for signing and sending transactions.
          *
          * @return Outputs of signing and sending transactions.
          */
-        readonly signAndSendAllTransactions: SolanaSignAndSendAllTransactionsMethod;
+        readonly signAndSendAllTransactions: BBAChainSignAndSendAllTransactionsMethod;
     };
 };
 
 /** Version of the feature. */
-export type SolanaSignAndSendAllTransactionsVersion = '1.0.0';
+export type BBAChainSignAndSendAllTransactionsVersion = '1.0.0';
 
 /** TODO: docs */
-export type SolanaSignAndSendAllTransactionsMethod = (
-    inputs: readonly SolanaSignAndSendTransactionInput[],
-    options?: SolanaSignAndSendAllTransactionsOptions
-) => Promise<readonly PromiseSettledResult<SolanaSignAndSendTransactionOutput>[]>;
+export type BBAChainSignAndSendAllTransactionsMethod = (
+    inputs: readonly BBAChainSignAndSendTransactionInput[],
+    options?: BBAChainSignAndSendAllTransactionsOptions
+) => Promise<readonly PromiseSettledResult<BBAChainSignAndSendTransactionOutput>[]>;
 
 /** Options for signing and sending multiple transactions. */
-export type SolanaSignAndSendAllTransactionsOptions = {
+export type BBAChainSignAndSendAllTransactionsOptions = {
     /** Mode for signing and sending transactions. */
-    readonly mode?: SolanaSignAndSendAllTransactionsMode;
+    readonly mode?: BBAChainSignAndSendAllTransactionsMode;
 };
 
 /** Mode for signing and sending transactions. */
-export type SolanaSignAndSendAllTransactionsMode = 'parallel' | 'serial';
+export type BBAChainSignAndSendAllTransactionsMode = 'parallel' | 'serial';

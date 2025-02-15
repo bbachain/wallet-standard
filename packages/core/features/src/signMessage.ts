@@ -1,30 +1,30 @@
 import type { WalletAccount } from '@wallet-standard/base';
 
 /** Name of the feature. */
-export const SolanaSignMessage = 'solana:signMessage';
+export const BBAChainSignMessage = 'bbachain:signMessage';
 
 /** TODO: docs */
-export type SolanaSignMessageFeature = {
+export type BBAChainSignMessageFeature = {
     /** Name of the feature. */
-    readonly [SolanaSignMessage]: {
+    readonly [BBAChainSignMessage]: {
         /** Version of the feature API. */
-        readonly version: SolanaSignMessageVersion;
+        readonly version: BBAChainSignMessageVersion;
 
         /** Sign messages (arbitrary bytes) using the account's secret key. */
-        readonly signMessage: SolanaSignMessageMethod;
+        readonly signMessage: BBAChainSignMessageMethod;
     };
 };
 
 /** Version of the feature. */
-export type SolanaSignMessageVersion = '1.1.0' | '1.0.0';
+export type BBAChainSignMessageVersion = '1.1.0' | '1.0.0';
 
 /** TODO: docs */
-export type SolanaSignMessageMethod = (
-    ...inputs: readonly SolanaSignMessageInput[]
-) => Promise<readonly SolanaSignMessageOutput[]>;
+export type BBAChainSignMessageMethod = (
+    ...inputs: readonly BBAChainSignMessageInput[]
+) => Promise<readonly BBAChainSignMessageOutput[]>;
 
 /** Input for signing a message. */
-export interface SolanaSignMessageInput {
+export interface BBAChainSignMessageInput {
     /** Account to use. */
     readonly account: WalletAccount;
 
@@ -33,7 +33,7 @@ export interface SolanaSignMessageInput {
 }
 
 /** Output of signing a message. */
-export interface SolanaSignMessageOutput {
+export interface BBAChainSignMessageOutput {
     /**
      * Message bytes that were signed.
      * The wallet may prefix or otherwise modify the message before signing it.

@@ -1,8 +1,8 @@
 {
-    "name": "@solana/wallet-standard",
-    "version": "1.1.4",
-    "author": "Solana Maintainers <maintainers@solana.foundation>",
-    "repository": "https://github.com/solana-labs/wallet-standard",
+    "name": "@bbachain/wallet-standard",
+    "version": "0.1.0",
+    "author": "BBAChain Labs <developers@bbachain.com>",
+    "repository": "https://github.com/bbachain/wallet-standard",
     "license": "Apache-2.0",
     "publishConfig": {
         "access": "public"
@@ -30,8 +30,8 @@
         "package": "shx mkdir -p lib/cjs && shx echo '{ \"type\": \"commonjs\" }' > lib/cjs/package.json"
     },
     "dependencies": {
-        "@solana/wallet-standard-core": "workspace:^",
-        "@solana/wallet-standard-wallet-adapter": "workspace:^"
+        "@bbachain/wallet-standard-core": "workspace:^",
+        "@bbachain/wallet-standard-wallet-adapter": "workspace:^"
     },
     "devDependencies": {
         "shx": "^0.3.4"

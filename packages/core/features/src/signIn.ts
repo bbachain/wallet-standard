@@ -1,28 +1,30 @@
 import type { WalletAccount } from '@wallet-standard/base';
 
 /** Name of the feature. */
-export const SolanaSignIn = 'solana:signIn';
+export const BBAChainSignIn = 'bbachain:signIn';
 
 /** TODO: docs */
-export type SolanaSignInFeature = {
+export type BBAChainSignInFeature = {
     /** Name of the feature. */
-    readonly [SolanaSignIn]: {
+    readonly [BBAChainSignIn]: {
         /** Version of the feature API. */
-        readonly version: SolanaSignInVersion;
+        readonly version: BBAChainSignInVersion;
 
-        /** Sign In With Solana (based on https://eips.ethereum.org/EIPS/eip-4361 and https://github.com/ChainAgnostic/CAIPs/blob/master/CAIPs/caip-122.md). */
-        readonly signIn: SolanaSignInMethod;
+        /** Sign In With BBAChain (based on https://eips.ethereum.org/EIPS/eip-4361 and https://github.com/ChainAgnostic/CAIPs/blob/master/CAIPs/caip-122.md). */
+        readonly signIn: BBAChainSignInMethod;
     };
 };
 
 /** Version of the feature. */
-export type SolanaSignInVersion = '1.0.0';
+export type BBAChainSignInVersion = '1.0.0';
 
 /** TODO: docs */
-export type SolanaSignInMethod = (...inputs: readonly SolanaSignInInput[]) => Promise<readonly SolanaSignInOutput[]>;
+export type BBAChainSignInMethod = (
+    ...inputs: readonly BBAChainSignInInput[]
+) => Promise<readonly BBAChainSignInOutput[]>;
 
 /** Input for signing in. */
-export interface SolanaSignInInput {
+export interface BBAChainSignInInput {
     /**
      * Optional EIP-4361 Domain.
      * If not provided, the wallet must determine the Domain to include in the message.
@@ -97,7 +99,7 @@ export interface SolanaSignInInput {
 }
 
 /** Output of signing in. */
-export interface SolanaSignInOutput {
+export interface BBAChainSignInOutput {
     /**
      * Account that was signed in.
      * The address of the account may be different from the provided input Address.

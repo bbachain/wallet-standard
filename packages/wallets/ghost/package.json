@@ -1,9 +1,9 @@
 {
     "private": true,
-    "name": "@solana/wallet-standard-ghost",
-    "version": "0.1.1",
-    "author": "Solana Maintainers <maintainers@solana.foundation>",
-    "repository": "https://github.com/solana-labs/wallet-standard",
+    "name": "@bbachain/wallet-standard-ghost",
+    "version": "0.1.0",
+    "author": "BBAChain Labs <developers@bbachain.com>",
+    "repository": "https://github.com/bbachain/wallet-standard",
     "license": "Apache-2.0",
     "engines": {
         "node": ">=16"
@@ -26,8 +26,8 @@
         "build": "npm run clean && npm run tsc && npm run package"
     },
     "dependencies": {
-        "@solana/wallet-standard-features": "workspace:^",
-        "@solana/web3.js": "^1.98.0",
+        "@bbachain/wallet-standard-features": "workspace:^",
+        "@bbachain/web3.js": "^1.1.3",
         "@wallet-standard/base": "^1.1.0",
         "@wallet-standard/features": "^1.1.0",
         "bs58": "^6.0.0"
