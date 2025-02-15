@@ -1,20 +1,20 @@
 import type { WalletWithFeatures } from '@wallet-standard/base';
-import type { SolanaSignAndSendTransactionFeature } from './signAndSendTransaction.js';
-import type { SolanaSignInFeature } from './signIn.js';
-import type { SolanaSignMessageFeature } from './signMessage.js';
-import type { SolanaSignTransactionFeature } from './signTransaction.js';
-import type { SolanaSignAndSendAllTransactionsFeature } from './signAndSendAllTransactions.js';
+import type { BBAChainSignAndSendTransactionFeature } from './signAndSendTransaction.js';
+import type { BBAChainSignInFeature } from './signIn.js';
+import type { BBAChainSignMessageFeature } from './signMessage.js';
+import type { BBAChainSignTransactionFeature } from './signTransaction.js';
+import type { BBAChainSignAndSendAllTransactionsFeature } from './signAndSendAllTransactions.js';
 
 /** TODO: docs */
-export type SolanaFeatures =
-    | SolanaSignAndSendTransactionFeature
-    | SolanaSignInFeature
-    | SolanaSignMessageFeature
-    | SolanaSignTransactionFeature
-    | SolanaSignAndSendAllTransactionsFeature;
+export type BBAChainFeatures =
+    | BBAChainSignAndSendTransactionFeature
+    | BBAChainSignInFeature
+    | BBAChainSignMessageFeature
+    | BBAChainSignTransactionFeature
+    | BBAChainSignAndSendAllTransactionsFeature;
 
 /** TODO: docs */
-export type WalletWithSolanaFeatures = WalletWithFeatures<SolanaFeatures>;
+export type WalletWithBBAChainFeatures = WalletWithFeatures<BBAChainFeatures>;
 
 export * from './signAndSendTransaction.js';
 export * from './signIn.js';

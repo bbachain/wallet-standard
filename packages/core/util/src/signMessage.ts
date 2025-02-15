@@ -1,5 +1,5 @@
 import { ed25519 } from '@noble/curves/ed25519';
-import type { SolanaSignMessageInput, SolanaSignMessageOutput } from '@solana/wallet-standard-features';
+import type { BBAChainSignMessageInput, BBAChainSignMessageOutput } from '@bbachain/wallet-standard-features';
 import { bytesEqual } from './util.js';
 
 /**
@@ -16,14 +16,14 @@ export function verifyMessageSignature({
     signature: Uint8Array;
     publicKey: Uint8Array;
 }): boolean {
-    // TODO: implement https://github.com/solana-labs/solana/blob/master/docs/src/proposals/off-chain-message-signing.md
+    // TODO: implement https://github.com/bbachain/bbachain/blob/master/docs/src/proposals/off-chain-message-signing.md
     return bytesEqual(message, signedMessage) && ed25519.verify(signature, signedMessage, publicKey);
 }
 
 /**
  * TODO: docs
  */
-export function verifySignMessage(input: SolanaSignMessageInput, output: SolanaSignMessageOutput): boolean {
+export function verifySignMessage(input: BBAChainSignMessageInput, output: BBAChainSignMessageOutput): boolean {
     const {
         message,
         account: { publicKey },

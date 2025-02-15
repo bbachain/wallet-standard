@@ -1,23 +1,23 @@
 import type { IdentifierString } from '@wallet-standard/base';
 import type {
-    SolanaSignTransactionInput,
-    SolanaSignTransactionOptions,
-    SolanaTransactionCommitment,
-    SolanaTransactionVersion,
+    BBAChainSignTransactionInput,
+    BBAChainSignTransactionOptions,
+    BBAChainTransactionCommitment,
+    BBAChainTransactionVersion,
 } from './signTransaction.js';
 
 /** Name of the feature. */
-export const SolanaSignAndSendTransaction = 'solana:signAndSendTransaction';
+export const BBAChainSignAndSendTransaction = 'bbachain:signAndSendTransaction';
 
 /** TODO: docs */
-export type SolanaSignAndSendTransactionFeature = {
+export type BBAChainSignAndSendTransactionFeature = {
     /** Name of the feature. */
-    readonly [SolanaSignAndSendTransaction]: {
+    readonly [BBAChainSignAndSendTransaction]: {
         /** Version of the feature API. */
-        readonly version: SolanaSignAndSendTransactionVersion;
+        readonly version: BBAChainSignAndSendTransactionVersion;
 
         /** TODO: docs */
-        readonly supportedTransactionVersions: readonly SolanaTransactionVersion[];
+        readonly supportedTransactionVersions: readonly BBAChainTransactionVersion[];
 
         /**
          * Sign transactions using the account's secret key and send them to the chain.
@@ -26,37 +26,37 @@ export type SolanaSignAndSendTransactionFeature = {
          *
          * @return Outputs of signing and sending transactions.
          */
-        readonly signAndSendTransaction: SolanaSignAndSendTransactionMethod;
+        readonly signAndSendTransaction: BBAChainSignAndSendTransactionMethod;
     };
 };
 
 /** Version of the feature. */
-export type SolanaSignAndSendTransactionVersion = '1.0.0';
+export type BBAChainSignAndSendTransactionVersion = '1.0.0';
 
 /** TODO: docs */
-export type SolanaSignAndSendTransactionMethod = (
-    ...inputs: readonly SolanaSignAndSendTransactionInput[]
-) => Promise<readonly SolanaSignAndSendTransactionOutput[]>;
+export type BBAChainSignAndSendTransactionMethod = (
+    ...inputs: readonly BBAChainSignAndSendTransactionInput[]
+) => Promise<readonly BBAChainSignAndSendTransactionOutput[]>;
 
 /** Input for signing and sending a transaction. */
-export interface SolanaSignAndSendTransactionInput extends SolanaSignTransactionInput {
+export interface BBAChainSignAndSendTransactionInput extends BBAChainSignTransactionInput {
     /** Chain to use. */
     readonly chain: IdentifierString;
 
     /** TODO: docs */
-    readonly options?: SolanaSignAndSendTransactionOptions;
+    readonly options?: BBAChainSignAndSendTransactionOptions;
 }
 
 /** Output of signing and sending a transaction. */
-export interface SolanaSignAndSendTransactionOutput {
+export interface BBAChainSignAndSendTransactionOutput {
     /** Transaction signature, as raw bytes. */
     readonly signature: Uint8Array;
 }
 
 /** Options for signing and sending a transaction. */
-export type SolanaSignAndSendTransactionOptions = SolanaSignTransactionOptions & {
+export type BBAChainSignAndSendTransactionOptions = BBAChainSignTransactionOptions & {
     /** Desired commitment level. If provided, confirm the transaction after sending. */
-    readonly commitment?: SolanaTransactionCommitment;
+    readonly commitment?: BBAChainTransactionCommitment;
 
     /** Disable transaction verification at the RPC. */
     readonly skipPreflight?: boolean;
