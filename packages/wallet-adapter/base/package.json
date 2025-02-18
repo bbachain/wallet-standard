@@ -34,7 +34,7 @@
         "bs58": "^6.0.0"
     },
     "dependencies": {
-        "@bbachain/wallet-adapter-base": "^0.1.0",
+        "@bbachain/wallet-adapter-base": "^0.1.1",
         "@bbachain/wallet-standard-chains": "workspace:^",
         "@bbachain/wallet-standard-features": "workspace:^",
         "@bbachain/wallet-standard-util": "workspace:^",
