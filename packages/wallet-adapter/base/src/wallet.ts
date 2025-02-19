@@ -1,26 +1,26 @@
-import { type Adapter, isVersionedTransaction, WalletReadyState } from '@solana/wallet-adapter-base';
-import { isSolanaChain, type SolanaChain } from '@solana/wallet-standard-chains';
+import { type Adapter, isVersionedTransaction, WalletReadyState } from '@bbachain/wallet-adapter-base';
+import { isBBAChainChain, type BBAChainChain } from '@bbachain/wallet-standard-chains';
 import {
-    SolanaSignAndSendTransaction,
-    type SolanaSignAndSendTransactionFeature,
-    type SolanaSignAndSendTransactionMethod,
-    type SolanaSignAndSendTransactionOutput,
-    SolanaSignIn,
-    type SolanaSignInFeature,
-    type SolanaSignInMethod,
-    type SolanaSignInOutput,
-    SolanaSignMessage,
-    type SolanaSignMessageFeature,
-    type SolanaSignMessageMethod,
-    type SolanaSignMessageOutput,
-    SolanaSignTransaction,
-    type SolanaSignTransactionFeature,
-    type SolanaSignTransactionMethod,
-    type SolanaSignTransactionOutput,
-    type SolanaTransactionVersion,
-} from '@solana/wallet-standard-features';
-import { getEndpointForChain } from '@solana/wallet-standard-util';
-import { Connection, Transaction, VersionedTransaction } from '@solana/web3.js';
+    BBAChainSignAndSendTransaction,
+    type BBAChainSignAndSendTransactionFeature,
+    type BBAChainSignAndSendTransactionMethod,
+    type BBAChainSignAndSendTransactionOutput,
+    BBAChainSignIn,
+    type BBAChainSignInFeature,
+    type BBAChainSignInMethod,
+    type BBAChainSignInOutput,
+    BBAChainSignMessage,
+    type BBAChainSignMessageFeature,
+    type BBAChainSignMessageMethod,
+    type BBAChainSignMessageOutput,
+    BBAChainSignTransaction,
+    type BBAChainSignTransactionFeature,
+    type BBAChainSignTransactionMethod,
+    type BBAChainSignTransactionOutput,
+    type BBAChainTransactionVersion,
+} from '@bbachain/wallet-standard-features';
+import { getEndpointForChain } from '@bbachain/wallet-standard-util';
+import { Connection, Transaction, VersionedTransaction } from '@bbachain/web3.js';
 import { getWallets } from '@wallet-standard/app';
 import type { Wallet, WalletIcon } from '@wallet-standard/base';
 import {
@@ -40,7 +40,7 @@ import { arraysEqual, bytesEqual, ReadonlyWalletAccount } from '@wallet-standard
 import bs58 from 'bs58';
 
 /** TODO: docs */
-export class SolanaWalletAdapterWalletAccount extends ReadonlyWalletAccount {
+export class BBAChainWalletAdapterWalletAccount extends ReadonlyWalletAccount {
     readonly #adapter: Adapter;
 
     constructor({
@@ -52,24 +52,24 @@ export class SolanaWalletAdapterWalletAccount extends ReadonlyWalletAccount {
         adapter: Adapter;
         address: string;
         publicKey: Uint8Array;
-        chains: readonly SolanaChain[];
+        chains: readonly BBAChainChain[];
     }) {
-        const features: (keyof (SolanaSignAndSendTransactionFeature &
-            SolanaSignTransactionFeature &
-            SolanaSignMessageFeature &
-            SolanaSignInFeature))[] = [SolanaSignAndSendTransaction];
+        const features: (keyof (BBAChainSignAndSendTransactionFeature &
+            BBAChainSignTransactionFeature &
+            BBAChainSignMessageFeature &
+            BBAChainSignInFeature))[] = [BBAChainSignAndSendTransaction];
         if ('signTransaction' in adapter) {
-            features.push(SolanaSignTransaction);
+            features.push(BBAChainSignTransaction);
         }
         if ('signMessage' in adapter) {
-            features.push(SolanaSignMessage);
+            features.push(BBAChainSignMessage);
         }
         if ('signIn' in adapter) {
-            features.push(SolanaSignIn);
+            features.push(BBAChainSignIn);
         }
 
         super({ address, publicKey, chains, features });
-        if (new.target === SolanaWalletAdapterWalletAccount) {
+        if (new.target === BBAChainWalletAdapterWalletAccount) {
             Object.freeze(this);
         }
 
@@ -78,15 +78,15 @@ export class SolanaWalletAdapterWalletAccount extends ReadonlyWalletAccount {
 }
 
 /** TODO: docs */
-export class SolanaWalletAdapterWallet implements Wallet {
+export class BBAChainWalletAdapterWallet implements Wallet {
     readonly #listeners: {
         [E in StandardEventsNames]?: StandardEventsListeners[E][];
     } = {};
     readonly #adapter: Adapter;
-    readonly #supportedTransactionVersions: readonly SolanaTransactionVersion[];
-    readonly #chain: SolanaChain;
+    readonly #supportedTransactionVersions: readonly BBAChainTransactionVersion[];
+    readonly #chain: BBAChainChain;
     readonly #endpoint: string | undefined;
-    #account: SolanaWalletAdapterWalletAccount | undefined;
+    #account: BBAChainWalletAdapterWalletAccount | undefined;
 
     get version() {
         return '1.0.0' as const;
@@ -106,12 +106,12 @@ export class SolanaWalletAdapterWallet implements Wallet {
 
     get features(): StandardConnectFeature &
         StandardDisconnectFeature &
-        SolanaSignAndSendTransactionFeature &
-        Partial<SolanaSignTransactionFeature & SolanaSignMessageFeature & SolanaSignInFeature> {
+        BBAChainSignAndSendTransactionFeature &
+        Partial<BBAChainSignTransactionFeature & BBAChainSignMessageFeature & BBAChainSignInFeature> {
         const features: StandardConnectFeature &
             StandardDisconnectFeature &
             StandardEventsFeature &
-            SolanaSignAndSendTransactionFeature = {
+            BBAChainSignAndSendTransactionFeature = {
             [StandardConnect]: {
                 version: '1.0.0',
                 connect: this.#connect,
@@ -124,17 +124,17 @@ export class SolanaWalletAdapterWallet implements Wallet {
                 version: '1.0.0',
                 on: this.#on,
             },
-            [SolanaSignAndSendTransaction]: {
+            [BBAChainSignAndSendTransaction]: {
                 version: '1.0.0',
                 supportedTransactionVersions: this.#supportedTransactionVersions,
                 signAndSendTransaction: this.#signAndSendTransaction,
             },
         };
 
-        let signTransactionFeature: SolanaSignTransactionFeature | undefined;
+        let signTransactionFeature: BBAChainSignTransactionFeature | undefined;
         if ('signTransaction' in this.#adapter) {
             signTransactionFeature = {
-                [SolanaSignTransaction]: {
+                [BBAChainSignTransaction]: {
                     version: '1.0.0',
                     supportedTransactionVersions: this.#supportedTransactionVersions,
                     signTransaction: this.#signTransaction,
@@ -142,20 +142,20 @@ export class SolanaWalletAdapterWallet implements Wallet {
             };
         }
 
-        let signMessageFeature: SolanaSignMessageFeature | undefined;
+        let signMessageFeature: BBAChainSignMessageFeature | undefined;
         if ('signMessage' in this.#adapter) {
             signMessageFeature = {
-                [SolanaSignMessage]: {
+                [BBAChainSignMessage]: {
                     version: '1.0.0',
                     signMessage: this.#signMessage,
                 },
             };
         }
 
-        let signInFeature: SolanaSignInFeature | undefined;
+        let signInFeature: BBAChainSignInFeature | undefined;
         if ('signIn' in this.#adapter) {
             signInFeature = {
-                [SolanaSignIn]: {
+                [BBAChainSignIn]: {
                     version: '1.0.0',
                     signIn: this.#signIn,
                 },
@@ -173,8 +173,8 @@ export class SolanaWalletAdapterWallet implements Wallet {
         return this.#endpoint;
     }
 
-    constructor(adapter: Adapter, chain: SolanaChain, endpoint?: string) {
-        if (new.target === SolanaWalletAdapterWallet) {
+    constructor(adapter: Adapter, chain: BBAChainChain, endpoint?: string) {
+        if (new.target === BBAChainWalletAdapterWallet) {
             Object.freeze(this);
         }
 
@@ -211,7 +211,7 @@ export class SolanaWalletAdapterWallet implements Wallet {
                 account.chains.includes(this.#chain) ||
                 !bytesEqual(account.publicKey, publicKey)
             ) {
-                this.#account = new SolanaWalletAdapterWalletAccount({
+                this.#account = new BBAChainWalletAdapterWalletAccount({
                     adapter: this.#adapter,
                     address,
                     publicKey,
@@ -266,14 +266,14 @@ export class SolanaWalletAdapterWallet implements Wallet {
         return transaction;
     }
 
-    #signAndSendTransaction: SolanaSignAndSendTransactionMethod = async (...inputs) => {
-        const outputs: SolanaSignAndSendTransactionOutput[] = [];
+    #signAndSendTransaction: BBAChainSignAndSendTransactionMethod = async (...inputs) => {
+        const outputs: BBAChainSignAndSendTransactionOutput[] = [];
 
         if (inputs.length === 1) {
             // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
             const input = inputs[0]!;
             if (input.account !== this.#account) throw new Error('invalid account');
-            if (!isSolanaChain(input.chain)) throw new Error('invalid chain');
+            if (!isBBAChainChain(input.chain)) throw new Error('invalid chain');
             const transaction = this.#deserializeTransaction(input.transaction);
             const { commitment, preflightCommitment, skipPreflight, maxRetries, minContextSlot } = input.options || {};
             const endpoint = getEndpointForChain(input.chain, this.#endpoint);
@@ -314,15 +314,15 @@ export class SolanaWalletAdapterWallet implements Wallet {
         return outputs;
     };
 
-    #signTransaction: SolanaSignTransactionMethod = async (...inputs) => {
+    #signTransaction: BBAChainSignTransactionMethod = async (...inputs) => {
         if (!('signTransaction' in this.#adapter)) throw new Error('signTransaction not implemented by adapter');
-        const outputs: SolanaSignTransactionOutput[] = [];
+        const outputs: BBAChainSignTransactionOutput[] = [];
 
         if (inputs.length === 1) {
             // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
             const input = inputs[0]!;
             if (input.account !== this.#account) throw new Error('invalid account');
-            if (input.chain && !isSolanaChain(input.chain)) throw new Error('invalid chain');
+            if (input.chain && !isBBAChainChain(input.chain)) throw new Error('invalid chain');
             const transaction = this.#deserializeTransaction(input.transaction);
 
             const signedTransaction = await this.#adapter.signTransaction(transaction);
@@ -340,7 +340,7 @@ export class SolanaWalletAdapterWallet implements Wallet {
         } else if (inputs.length > 1) {
             for (const input of inputs) {
                 if (input.account !== this.#account) throw new Error('invalid account');
-                if (input.chain && !isSolanaChain(input.chain)) throw new Error('invalid chain');
+                if (input.chain && !isBBAChainChain(input.chain)) throw new Error('invalid chain');
             }
             const transactions = inputs.map(({ transaction }) => this.#deserializeTransaction(transaction));
 
@@ -365,9 +365,9 @@ export class SolanaWalletAdapterWallet implements Wallet {
         return outputs;
     };
 
-    #signMessage: SolanaSignMessageMethod = async (...inputs) => {
+    #signMessage: BBAChainSignMessageMethod = async (...inputs) => {
         if (!('signMessage' in this.#adapter)) throw new Error('signMessage not implemented by adapter');
-        const outputs: SolanaSignMessageOutput[] = [];
+        const outputs: BBAChainSignMessageOutput[] = [];
 
         if (inputs.length === 1) {
             // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
@@ -387,12 +387,12 @@ export class SolanaWalletAdapterWallet implements Wallet {
         return outputs;
     };
 
-    #signIn: SolanaSignInMethod = async (...inputs) => {
+    #signIn: BBAChainSignInMethod = async (...inputs) => {
         if (!('signIn' in this.#adapter)) throw new Error('signIn not implemented by adapter');
 
         if (inputs.length > 1) {
             // Adapters don't support `signIn` with multiple inputs, so just sign in with each input in serial.
-            const outputs: SolanaSignInOutput[] = [];
+            const outputs: BBAChainSignInOutput[] = [];
             for (const input of inputs) {
                 outputs.push(await this.#adapter.signIn(input));
             }
@@ -406,7 +406,7 @@ export class SolanaWalletAdapterWallet implements Wallet {
 /** TODO: docs */
 export function registerWalletAdapter(
     adapter: Adapter,
-    chain: SolanaChain,
+    chain: BBAChainChain,
     endpoint?: string,
     match: (wallet: Wallet) => boolean = (wallet) => wallet.name === adapter.name
 ): () => void {
@@ -426,7 +426,7 @@ export function registerWalletAdapter(
         const ready =
             adapter.readyState === WalletReadyState.Installed || adapter.readyState === WalletReadyState.Loadable;
         if (ready) {
-            const wallet = new SolanaWalletAdapterWallet(adapter, chain, endpoint);
+            const wallet = new BBAChainWalletAdapterWallet(adapter, chain, endpoint);
             destructors.push(() => wallet.destroy());
             // Register the adapter wrapped as a standard wallet, and receive a function to unregister the adapter.
             destructors.push(register(wallet));

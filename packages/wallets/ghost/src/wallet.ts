@@ -1,22 +1,23 @@
 import {
-    SolanaSignAndSendTransaction,
-    type SolanaSignAndSendTransactionFeature,
-    type SolanaSignAndSendTransactionMethod,
-    type SolanaSignAndSendTransactionOutput,
-    SolanaSignIn,
-    type SolanaSignInFeature,
-    type SolanaSignInMethod,
-    type SolanaSignInOutput,
-    SolanaSignMessage,
-    type SolanaSignMessageFeature,
-    type SolanaSignMessageMethod,
-    type SolanaSignMessageOutput,
-    SolanaSignTransaction,
-    type SolanaSignTransactionFeature,
-    type SolanaSignTransactionMethod,
-    type SolanaSignTransactionOutput,
-} from '@solana/wallet-standard-features';
-import { Transaction, VersionedTransaction } from '@solana/web3.js';
+    BBAChainSignAndSendTransaction,
+    type BBAChainSignAndSendTransactionFeature,
+    type BBAChainSignAndSendTransactionMethod,
+    type BBAChainSignAndSendTransactionOutput,
+    BBAChainSignIn,
+    type BBAChainSignInFeature,
+    type BBAChainSignInMethod,
+    type BBAChainSignInOutput,
+    BBAChainSignMessage,
+    type BBAChainSignMessageFeature,
+    type BBAChainSignMessageMethod,
+    type BBAChainSignMessageOutput,
+    BBAChainSignTransaction,
+    type BBAChainSignTransactionFeature,
+    type BBAChainSignTransactionMethod,
+    type BBAChainSignTransactionOutput,
+} from '@bbachain/wallet-standard-features';
+import type { Transaction } from '@bbachain/web3.js';
+import { VersionedTransaction } from '@bbachain/web3.js';
 import type { Wallet } from '@wallet-standard/base';
 import {
     StandardConnect,
@@ -34,8 +35,8 @@ import {
 import bs58 from 'bs58';
 import { GhostWalletAccount } from './account.js';
 import { icon } from './icon.js';
-import type { SolanaChain } from './solana.js';
-import { isSolanaChain, isVersionedTransaction, SOLANA_CHAINS } from './solana.js';
+import type { BBAChain } from './solana.js';
+import { isBBAChain, isVersionedTransaction, BBACHAIN_CHAINS } from './solana.js';
 import { bytesEqual } from './util.js';
 import type { Ghost } from './window.js';
 
@@ -68,16 +69,16 @@ export class GhostWallet implements Wallet {
     }
 
     get chains() {
-        return SOLANA_CHAINS.slice();
+        return BBACHAIN_CHAINS.slice();
     }
 
     get features(): StandardConnectFeature &
         StandardDisconnectFeature &
         StandardEventsFeature &
-        SolanaSignAndSendTransactionFeature &
-        SolanaSignTransactionFeature &
-        SolanaSignMessageFeature &
-        SolanaSignInFeature &
+        BBAChainSignAndSendTransactionFeature &
+        BBAChainSignTransactionFeature &
+        BBAChainSignMessageFeature &
+        BBAChainSignInFeature &
         GhostFeature {
         return {
             [StandardConnect]: {
@@ -92,21 +93,21 @@ export class GhostWallet implements Wallet {
                 version: '1.0.0',
                 on: this.#on,
             },
-            [SolanaSignAndSendTransaction]: {
+            [BBAChainSignAndSendTransaction]: {
                 version: '1.0.0',
                 supportedTransactionVersions: ['legacy', 0],
                 signAndSendTransaction: this.#signAndSendTransaction,
             },
-            [SolanaSignTransaction]: {
+            [BBAChainSignTransaction]: {
                 version: '1.0.0',
                 supportedTransactionVersions: ['legacy', 0],
                 signTransaction: this.#signTransaction,
             },
-            [SolanaSignMessage]: {
+            [BBAChainSignMessage]: {
                 version: '1.0.0',
                 signMessage: this.#signMessage,
             },
-            [SolanaSignIn]: {
+            [BBAChainSignIn]: {
                 version: '1.0.0',
                 signIn: this.#signIn,
             },
@@ -191,17 +192,17 @@ export class GhostWallet implements Wallet {
         await this.#ghost.disconnect();
     };
 
-    #signAndSendTransaction: SolanaSignAndSendTransactionMethod = async (...inputs) => {
+    #signAndSendTransaction: BBAChainSignAndSendTransactionMethod = async (...inputs) => {
         if (!this.#account) throw new Error('not connected');
 
-        const outputs: SolanaSignAndSendTransactionOutput[] = [];
+        const outputs: BBAChainSignAndSendTransactionOutput[] = [];
 
         if (inputs.length === 1) {
             // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
             const { transaction, account, chain, options } = inputs[0]!;
             const { minContextSlot, preflightCommitment, skipPreflight, maxRetries } = options || {};
             if (account !== this.#account) throw new Error('invalid account');
-            if (!isSolanaChain(chain)) throw new Error('invalid chain');
+            if (!isBBAChain(chain)) throw new Error('invalid chain');
 
             const { signature } = await this.#ghost.signAndSendTransaction(
                 VersionedTransaction.deserialize(transaction),
@@ -223,16 +224,16 @@ export class GhostWallet implements Wallet {
         return outputs;
     };
 
-    #signTransaction: SolanaSignTransactionMethod = async (...inputs) => {
+    #signTransaction: BBAChainSignTransactionMethod = async (...inputs) => {
         if (!this.#account) throw new Error('not connected');
 
-        const outputs: SolanaSignTransactionOutput[] = [];
+        const outputs: BBAChainSignTransactionOutput[] = [];
 
         if (inputs.length === 1) {
             // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
             const { transaction, account, chain } = inputs[0]!;
             if (account !== this.#account) throw new Error('invalid account');
-            if (chain && !isSolanaChain(chain)) throw new Error('invalid chain');
+            if (chain && !isBBAChain(chain)) throw new Error('invalid chain');
 
             const signedTransaction = await this.#ghost.signTransaction(VersionedTransaction.deserialize(transaction));
 
@@ -247,11 +248,11 @@ export class GhostWallet implements Wallet {
 
             outputs.push({ signedTransaction: serializedTransaction });
         } else if (inputs.length > 1) {
-            let chain: SolanaChain | undefined = undefined;
+            let chain: BBAChain | undefined = undefined;
             for (const input of inputs) {
                 if (input.account !== this.#account) throw new Error('invalid account');
                 if (input.chain) {
-                    if (!isSolanaChain(input.chain)) throw new Error('invalid chain');
+                    if (!isBBAChain(input.chain)) throw new Error('invalid chain');
                     if (chain) {
                         if (input.chain !== chain) throw new Error('conflicting chain');
                     } else {
@@ -283,10 +284,10 @@ export class GhostWallet implements Wallet {
         return outputs;
     };
 
-    #signMessage: SolanaSignMessageMethod = async (...inputs) => {
+    #signMessage: BBAChainSignMessageMethod = async (...inputs) => {
         if (!this.#account) throw new Error('not connected');
 
-        const outputs: SolanaSignMessageOutput[] = [];
+        const outputs: BBAChainSignMessageOutput[] = [];
 
         if (inputs.length === 1) {
             // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
@@ -305,8 +306,8 @@ export class GhostWallet implements Wallet {
         return outputs;
     };
 
-    #signIn: SolanaSignInMethod = async (...inputs) => {
-        const outputs: SolanaSignInOutput[] = [];
+    #signIn: BBAChainSignInMethod = async (...inputs) => {
+        const outputs: BBAChainSignInOutput[] = [];
 
         if (inputs.length > 1) {
             for (const input of inputs) {

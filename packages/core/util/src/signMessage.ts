@@ -1,5 +1,5 @@
 import { ed25519 } from '@noble/curves/ed25519';
-import type { SolanaSignMessageInput, SolanaSignMessageOutput } from '@solana/wallet-standard-features';
+import type { BBAChainSignMessageInput, BBAChainSignMessageOutput } from '@bbachain/wallet-standard-features';
 import { bytesEqual } from './util.js';
 
 /**
@@ -23,7 +23,7 @@ export function verifyMessageSignature({
 /**
  * TODO: docs
  */
-export function verifySignMessage(input: SolanaSignMessageInput, output: SolanaSignMessageOutput): boolean {
+export function verifySignMessage(input: BBAChainSignMessageInput, output: BBAChainSignMessageOutput): boolean {
     const {
         message,
         account: { publicKey },

@@ -11,52 +11,52 @@ import {
 const signInMessageTests = {
     'with `domain` and `address`': {
         parsed: {
-            domain: 'solana.com',
+            domain: 'bbachain.com',
             address: 'A',
         },
-        text: 'solana.com wants you to sign in with your Solana account:\nA',
+        text: 'bbachain.com wants you to sign in with your BBAChain account:\nA',
     },
     'with `statement`': {
         parsed: {
-            domain: 'solana.com',
+            domain: 'bbachain.com',
             address: 'A',
             statement: 'S',
         },
-        text: 'solana.com wants you to sign in with your Solana account:\nA\n\nS',
+        text: 'bbachain.com wants you to sign in with your BBAChain account:\nA\n\nS',
     },
     'with multi-line `statement`': {
         parsed: {
-            domain: 'solana.com',
+            domain: 'bbachain.com',
             address: 'A',
             statement: 'S\n\nS',
         },
-        text: 'solana.com wants you to sign in with your Solana account:\nA\n\nS\n\nS',
+        text: 'bbachain.com wants you to sign in with your BBAChain account:\nA\n\nS\n\nS',
     },
     'with fields': {
         parsed: {
-            domain: 'solana.com',
+            domain: 'bbachain.com',
             address: 'A',
-            uri: 'https://solana.com',
+            uri: 'https://bbachain.com',
         },
-        text: 'solana.com wants you to sign in with your Solana account:\nA\n\nURI: https://solana.com',
+        text: 'bbachain.com wants you to sign in with your BBAChain account:\nA\n\nURI: https://bbachain.com',
     },
     'with `statement` and fields': {
         parsed: {
-            domain: 'solana.com',
+            domain: 'bbachain.com',
             address: 'A',
             statement: 'S',
-            uri: 'https://solana.com',
+            uri: 'https://bbachain.com',
         },
-        text: 'solana.com wants you to sign in with your Solana account:\nA\n\nS\n\nURI: https://solana.com',
+        text: 'bbachain.com wants you to sign in with your BBAChain account:\nA\n\nS\n\nURI: https://bbachain.com',
     },
     'with multi-line `statement` and fields': {
         parsed: {
-            domain: 'solana.com',
+            domain: 'bbachain.com',
             address: 'A',
             statement: 'S\n\nS',
-            uri: 'https://solana.com',
+            uri: 'https://bbachain.com',
         },
-        text: 'solana.com wants you to sign in with your Solana account:\nA\n\nS\n\nS\n\nURI: https://solana.com',
+        text: 'bbachain.com wants you to sign in with your BBAChain account:\nA\n\nS\n\nS\n\nURI: https://bbachain.com',
     },
 };
 
