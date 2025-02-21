@@ -1,1 +1,0 @@
-# @bbachain/wallet-standard-bbawallet
